@@ -48,7 +48,7 @@ public class ZKClient implements Watcher {
     /**
      * 超时时间
      */
-    public int sessionTimeout = 30000;
+    public int sessionTimeout = 500000;
 
     public ZKClient(String config, String lockName){
         this.lockName = lockName;
@@ -92,7 +92,7 @@ public class ZKClient implements Watcher {
         Stat stat = zk.exists(root + "/" + lower,true);
         //判断比自己小一个数的节点是否存在,如果不存在则无需等待锁,同时注册监听
         if(stat != null){
-            System.out.println("Thread " + Thread.currentThread().getId() + " waiting for " + root + "/" + lower);
+            System.out.println("等待获取锁："+"Thread " + Thread.currentThread().getId() + " waiting for " + root + "/" + lower);
             this.latch = new CountDownLatch(1);
             //等待，这里应该一直等待其他线程释放锁
             this.latch.await(waitTime, TimeUnit.MILLISECONDS);

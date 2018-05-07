@@ -27,19 +27,14 @@ public class ZKLock extends ZKClient implements Lock {
      */
     @Override
     public void lock() {
-        try {
-            if(this.tryLock()){
-                System.out.println("Thread " + Thread.currentThread().getId() + " " +myZnode + " get lock true");
-                return;
-            }
-            else{
-                //等待锁
-                waitForLock(waitNode, sessionTimeout);
-            }
-        } catch (KeeperException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if(this.tryLock()){
+            System.out.println("Thread " + Thread.currentThread().getId() + " " +myZnode + " get lock true");
+            return;
+        }else{
+            //等待锁
+            //waitForLock(waitNode, sessionTimeout);
+            System.out.println("等待锁--------");
+            return;
         }
     }
 
@@ -49,11 +44,11 @@ public class ZKLock extends ZKClient implements Lock {
         try {
             String splitStr = "_lock_";
             if(lockName.contains(splitStr)) {
-                throw new RuntimeException("lockName can not contains");
+                throw new RuntimeException("lockName can not contains _lock_");
             }
             //创建临时子节点
             myZnode = zk.create(root + "/" + lockName + splitStr, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
-            System.out.println(myZnode + " is created ");
+            System.out.println("创建临时子节点成功："+myZnode + " is created ");
             //取出所有子节点
             List<String> subNodes = zk.getChildren(root, false);
             //取出所有lockName的锁
@@ -68,7 +63,7 @@ public class ZKLock extends ZKClient implements Lock {
 
             if(myZnode.equals(root+"/"+lockObjNodes.get(0))){
                 //如果是最小的节点,则表示取得锁
-                System.out.println(myZnode + "==" + lockObjNodes.get(0));
+                System.out.println("如果是最小的节点,则表示取得锁"+myZnode + "==" + lockObjNodes.get(0));
                 return true;
             }
             //如果不是最小的节点，找到比自己小1的节点
@@ -99,10 +94,9 @@ public class ZKLock extends ZKClient implements Lock {
     @Override
     public void unlock() {
         try {
-            System.out.println("unlock " + myZnode);
+            System.out.println("unlock delete node" + myZnode);
             zk.delete(myZnode,-1);
             myZnode = null;
-            zk.close();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (KeeperException e) {
