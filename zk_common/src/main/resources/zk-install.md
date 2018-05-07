@@ -1,12 +1,12 @@
-\u642D\u5EFA\u6B65\u9AA4\uFF1A
-1\u3001\u5B98\u7F51\u4E0B\u8F7Dzookeeper\u5B89\u88C5\u5305\uFF1A
-tickTime\uFF1A\u8FD9\u4E2A\u65F6\u95F4\u662F\u4F5C\u4E3A Zookeeper \u670D\u52A1\u5668\u4E4B\u95F4\u6216\u5BA2\u6237\u7AEF\u4E0E\u670D\u52A1\u5668\u4E4B\u95F4\u7EF4\u6301\u5FC3\u8DF3\u7684\u65F6\u95F4\u95F4\u9694\uFF0C\u4E5F\u5C31\u662F\u6BCF\u4E2A tickTime \u65F6\u95F4\u5C31\u4F1A\u53D1\u9001\u4E00\u4E2A\u5FC3\u8DF3\u3002
-dataDir\uFF1A\u987E\u540D\u601D\u4E49\u5C31\u662F Zookeeper \u4FDD\u5B58\u6570\u636E\u7684\u76EE\u5F55\uFF0C\u9ED8\u8BA4\u60C5\u51B5\u4E0B\uFF0CZookeeper \u5C06\u5199\u6570\u636E\u7684\u65E5\u5FD7\u6587\u4EF6\u4E5F\u4FDD\u5B58\u5728\u8FD9\u4E2A\u76EE\u5F55\u91CC\u3002
-clientPort\uFF1A\u8FD9\u4E2A\u7AEF\u53E3\u5C31\u662F\u5BA2\u6237\u7AEF\u8FDE\u63A5 Zookeeper \u670D\u52A1\u5668\u7684\u7AEF\u53E3\uFF0CZookeeper \u4F1A\u76D1\u542C\u8FD9\u4E2A\u7AEF\u53E3\uFF0C\u63A5\u53D7\u5BA2\u6237\u7AEF\u7684\u8BBF\u95EE\u8BF7\u6C42\u3002
-initLimit:\u96C6\u7FA4\u4E2D\u7684follower\u670D\u52A1\u5668(F)\u4E0Eleader\u670D\u52A1\u5668(L)\u4E4B\u95F4\u521D\u59CB\u8FDE\u63A5\u65F6\u80FD\u5BB9\u5FCD\u7684\u6700\u591A\u5FC3\u8DF3\u6570\uFF08tickTime\u7684\u6570\u91CF\uFF09
-syncLimit:\u96C6\u7FA4\u4E2D\u7684follower\u670D\u52A1\u5668\u4E0Eleader\u670D\u52A1\u5668\u4E4B\u95F4\u8BF7\u6C42\u548C\u5E94\u7B54\u4E4B\u95F4\u80FD\u5BB9\u5FCD\u7684\u6700\u591A\u5FC3\u8DF3\u6570\uFF08tickTime\u7684\u6570\u91CF\uFF09\u3002
+搭建步骤：
+1、官网下载zookeeper安装包：
+tickTime：这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。
+dataDir：顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper 将写数据的日志文件也保存在这个目录里。
+clientPort：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。
+initLimit:集群中的follower服务器(F)与leader服务器(L)之间初始连接时能容忍的最多心跳数（tickTime的数量）
+syncLimit:集群中的follower服务器与leader服务器之间请求和应答之间能容忍的最多心跳数（tickTime的数量）。
 ```
-#\u542F\u52A8zookeeper\uFF0Cwindows\u4E0B\u6267\u884Czookeeper-3.4.6\bin >zkServer.cmd\uFF1Blinux\u4E0Bookeeper-3.4.6\bin >zkServer.sh start\u542F\u52A8
+#启动zookeeper，windows下执行zookeeper-3.4.6\bin >zkServer.cmd；linux下ookeeper-3.4.6\bin >zkServer.sh start启动
 # The number of milliseconds of each tick
 tickTime=2000
 # The number of ticks that the initial
@@ -28,11 +28,56 @@ server.1=localhost:2887:3887
 server.2=localhost:2888:3888
 server.3=localhost:2889:3889
 ```
-#\u6B65\u9AA4\uFF1A
+#步骤：
 ```
-1.\u914D\u7F6Ezoo.cfg\u6587\u4EF6\uFF0C\u5982\u4E0A
-2.\u62F7\u8D1D\u4E09\u4E2Azookeeper\u5B9E\u4F8B\uFF0C\u5206\u522B\u4FEE\u6539clientPort=2181\uFF0C2182,2183
-3.bin\u76EE\u5F55\u542F\u52A8zkServer.cmd
-4.\u524D\u4E24\u4E2A\u542F\u52A8\u4F1A\u5F02\u5E38\uFF0C\u7B2C\u4E09\u4E2A\u542F\u52A8\u6210\u529F\u540E\u5219\u96C6\u7FA4\u642D\u5EFA\u6210\u529F\u3002
-5.\u9A8C\u8BC1\u662F\u5426\u542F\u52A8\uFF1AzkCli.cmd -server 127.0.0.1:2181
+1.配置zoo.cfg文件，如上
+2.拷贝三个zookeeper实例，分别修改clientPort=2181，2182,2183
+    配置不同的data路径，data下创建myid文件，分别配置server的别名：1、2、3：
+    dataDir=D:/ruanjain/zookeeper/service3/zookeeper-3.4.12/data/
+3.bin目录启动zkServer.cmd
+4.前两个启动会异常，第三个启动成功后则集群搭建成功。
+5.验证是否启动：zkCli.cmd -server 127.0.0.1:2181
+```
+#查询
+```
+zookeeper客户端操作：
+https://www.cnblogs.com/sherrykid/p/5813148.html
+
+1.zkCli.cmd
+
+2.查询相关指令
+ls path：列出path下的文件
+get path：获取指定节点的内容
+stat path：查看节点状态
+3.创建指令
+a.命令：create [-s] [-e] path data acl
+  在根目录创建了node_1节点，携带数据 123
+  1 [zk: 127.0.0.1:2181(CONNECTED) 10] create /node_1 123
+  2 Created /node_1
+  使用 get /node_1 验证是否添加节点及其数据成功
+b.创建了一个临时节点（-e）
+  create -e /node_1/node_1_1 234
+  Created /node_1/node_1_1
+  查看状态：stat /node_1/node_1_1
+c.create -s /node_1/node_1_2 234
+通过使用-s参数，创建一个顺序节点，我们虽然指定的节点名是node_1_1，但是实际上，名称却是 node_1_10000000001，如果我们重复执行：
+-s 和 -e 可以同时使用
+
+4.其他参数含义
+cZxid:创建节点时的事务id
+pZxid:子节点列表最后一次被修改的事务id
+cversion:节点版本号
+dataCersion:数据版本号
+aclVerson:acl权限版本号
+ephemeralOwner值不再是0，表示这个临时节点的版本号，如果是永久节点则其值为 0x0
+5.退出：quit
+6.修改相关指定：
+ set path data [version]
+7.删除指令：
+  delete path [version]
+  删除指定节点数据，其version参数的作用于set指定一致
+  delete /node_1/node_1_10000000001
+  整个节点全删除
+  注意：delete只能删除不包含子节点的节点，如果要删除的节点包含子节点，使用rmr命令
+  rmr /node_1
 ```
