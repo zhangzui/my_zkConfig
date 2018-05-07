@@ -6,8 +6,11 @@ clientPort：这个端口就是客户端连接 Zookeeper 服务器的端口，Zo
 initLimit:集群中的follower服务器(F)与leader服务器(L)之间初始连接时能容忍的最多心跳数（tickTime的数量）
 syncLimit:集群中的follower服务器与leader服务器之间请求和应答之间能容忍的最多心跳数（tickTime的数量）。
 
+#启动zookeeper，windows下执行zookeeper-3.4.6\bin >zkServer.cmd；
+linux下ookeeper-3.4.6\bin >zkServer.sh start启动
+
+1.配置文件zoo.cfg:zookeeper安装目录下，copy一个cfg文件，重命名为zoo.cfg
 ```
-#启动zookeeper，windows下执行zookeeper-3.4.6\bin >zkServer.cmd；linux下ookeeper-3.4.6\bin >zkServer.sh start启动
 # The number of milliseconds of each tick
 tickTime=2000
 # The number of ticks that the initial
@@ -82,9 +85,11 @@ ephemeralOwner值不再是0，表示这个临时节点的版本号，如果是�
   rmr /node_1
 ```
 #操作示例
+create /root 123
+get /root
 
 ```
-[zk: localhost:2181(CONNECTED) 1] get /MyFirstZnode
+[zk: localhost:2181(CONNECTED) 1] get /root
 My first zookeeper app
 cZxid = 0x100000002
 ctime = Mon May 07 16:29:48 CST 2018
