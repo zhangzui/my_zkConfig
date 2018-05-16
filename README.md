@@ -45,7 +45,7 @@ server.3=localhost:2889:3889
     dataDir=D:/ruanjain/zookeeper/service3/zookeeper-3.4.12/data/
 3.bin目录启动zkServer.cmd，前两个会抛异常，当最后一个启动成功之后会，集群搭建成功;
 4.前两个启动会异常，第三个启动成功后则集群搭建成功。
-5.验证是否启动：zkCli.cmd -server 127.0.0.1:2181
+5.验证是否启动：zkCli.cmd -server 127.0.0.1:2181 linux 查看端口：netstat -apn | grep 8005
 
 #Zookeeper的工作原理
 
@@ -72,11 +72,17 @@ server.3=localhost:2889:3889
 #自己搭建一个my_config组件
 
 #参考资料：
-1.百度DisConfig：
+1.百度DisConfig：基于ZK推送模式
 https://blog.csdn.net/t_6666/article/details/51658589
-2.携程的Apollo
-3.阿里的Diamond
+2.携程的Apollo 基于ZK,
+服务端基于Spring Boot和Spring Cloud开发，打包后可以直接运行，不需要额外安装Tomcat等应用容器.
+灰度发布：
+支持配置的灰度发布，比如点了发布后，只对部分应用实例生效，等观察一段时间没问题后再推给所有应用实例
+https://blog.csdn.net/Michael_HM/article/details/79412461
+3.阿里的Diamond-基于拉取模式
 
 
+https://www.cnblogs.com/raphael5200/p/5285583.html
+http://www.sohu.com/a/137884523_262549
 https://blog.csdn.net/dajiangtai007/article/details/68488701
 https://www.processon.com/diagrams/new?category=flow#temp-system
