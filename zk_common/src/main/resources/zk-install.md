@@ -23,6 +23,7 @@ syncLimit=5
 # do not use /tmp for storage, /tmp here is just
 # example sakes.
 dataDir=D:/ruanjain/zookeeper/service3/zookeeper-3.4.12/data/
+dataDir=/home/zhangzuizui/myresource/programs/server1/data
 # the port at which the clients will connect
 clientPort=2181
 # the maximum number of client connections.
@@ -32,7 +33,6 @@ server.1=localhost:2887:3887
 server.2=localhost:2888:3888
 server.3=localhost:2889:3889
 ```
-
 #步骤：
 
 ```
@@ -43,6 +43,7 @@ server.3=localhost:2889:3889
 3.bin目录启动zkServer.cmd，前两个会抛异常，当最后一个启动成功之后会，集群搭建成功
 4.前两个启动会异常，第三个启动成功后则集群搭建成功。
 5.验证是否启动：zkCli.cmd -server 127.0.0.1:2181
+查看端口占用：netstat -anp | grep 2181
 ```
 #查询
 ```
